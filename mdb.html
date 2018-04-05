@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+<form action="mdb_results.php" method="get">
+Shipname: <input type="text" name="shipname"><br>
+Destination:<input type="text" name="destination"><br>
+Captain First name <input type="text" name="captainfirstname"><br>
+Captain Last name: <input type="text" name="captainlastname"><br>
+
+<input type="checkbox" name="datareq[]" id="shipinfo" value="shipinfo" checked>
+<label for="shipinfo">Show Shipdata</label><br>
+<input type="checkbox" name="datareq[]" id="shipname" value="shipname">
+<label for="shipname">Show Shipname</label><br>
+<input type="checkbox" name="datareq[]" id="shiptype" value="shiptype">
+<label for="shiptype">Show Shiptype</label><br>
+<input type="checkbox" name="datareq[]" id="destination" value="destination">
+<label for="destination">Show Destination</label><br>
+<input type="checkbox" name="datareq[]" id="captainfirstname" value="captainfirstname">
+<label for="captainfirstname">Show Captain firstname</label><br>
+<input type="checkbox" name="datareq[]" id="captainlastname" value="captainlastname">
+<label for="captainlastname">Show Captain lastname</label><br>
+
+
+
+<input type="submit" value="Submit!">
+</form>
+
+</body>
+</html>
