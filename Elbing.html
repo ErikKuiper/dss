@@ -1,0 +1,125 @@
+<html>
+<style>
+.navigation {
+	font-family: "Trebuchet MS", Arial, Helvetiva, sans-serif;
+	background-color: #4C4C4C;
+	overflow: hidden;
+	width: 50%;
+	}
+
+.navigation a {
+	float: left;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	}
+
+.navigation a:hover{
+	background-color: #ddd;
+	color: black;
+	}
+
+.navigation a.active {
+	background-color: #4C50AF;
+	color: white;
+	}
+
+#input {
+	font-family: "Trebuchet MS", Arial, Helvetiva, sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+	}
+
+#input td, #input th {
+	border: 1px solid #ddd;
+	padding: 8px;
+	}
+	
+#input tr:nth-child(even){background-color: #f2f2f2;}
+
+#input tr:hover {background-color: #ddd;}
+
+#input th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-allign: center;
+	background-color: #4C50AF;
+	color: white;
+	
+	
+</style>
+
+<body>
+<div class=navigation>
+<a href="tables.html">MDB</a>
+<a href="arachangel.html">Archangel</a>
+<a class="active" href="Elbing.html">Elbing</a>
+</div>
+
+<div class=table>
+<form action="elbing_results.php" method="get">
+<table id="input">
+	<tr><th>Display variables</th>
+	<th>Filter variables</th>
+	</tr>
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="shipname" value="shipname">
+		<label for="shipname">Shipname</label>
+	</td>
+    <td>
+		<input type="text" name="shipname">
+    </td></tr>
+
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="shipdate" value="shipdate">
+		<label for="shipdate">Date</label>
+	</td>
+    <td></td></tr>
+
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="homeport" value="homeport">
+		<label for="homeport">Homeport</label>
+	</td>
+    <td></td></tr>
+
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="destination" value="destination">
+		<label for="destination">Destination</label>
+	</td>
+    <td>
+		<input type="text" name="destination">
+    </td></tr>
+	
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="productname" value="productname">
+		<label for="productname">Product Name</label>
+	</td>
+    <td>
+		<input type="text" name="productname">
+    </td></tr>
+	
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="captainname" value="captainname">
+		<label for="captainname">Captainname</label>
+	</td>
+    <td>
+		<input type="text" name="captainname">
+    </td></tr>
+	
+    <tr><td>
+		<input type="checkbox" name="datareq[]" id="captainhometown" value="captainhometown">
+		<label for="captainhometown">Captain Hometown</label>
+	</td>
+    <td>
+		<input type="text" name="captainhometown">
+    </td></tr>
+
+	
+</table>
+<input type="submit" value="Submit!">
+</form>
+</div>
+</body>
+</html>
