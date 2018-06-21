@@ -1,4 +1,5 @@
-# dss
-dss project
+# DSS
+DSS Project files.
 
-One frontpage and one php page to pull data.
+All six of the files I created for my DSS interface project.
+Three HTML interface pages and three PHP pages that handle user input.
