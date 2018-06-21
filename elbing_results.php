@@ -53,14 +53,13 @@
 
   <body>
   <div class=navigation>
-  <a class="active" href="mdb.html">MDB</a>
+  <a href="mdb.html">MDB</a>
   <a href="archangel.html">Archangel</a>
-  <a href="elbing.html">Elbing</a>
+  <a class="active" href="elbing.html">Elbing</a>
   </div>
 
   <div class=table>
 
-  
   <?php
   error_reporting(E_ERROR | E_PARSE);
   /* ARC2 static class inclusion */ 
@@ -75,54 +74,51 @@
   /* Create empty variables to use later if needed. */
   
   $shipname = '';
-  $shiptype = '';
+  $shipdate = '';
   $homeport = '';
   $destination = '';
-  $captaininfo = '';
-  $captainfirstname = '';
-  $captainlastname = '';
-  $captainhome = '';
+  $productflow = '';
+  $productinout = '';
+  $productname = '';
+  $captainname = '';
+  $captainhometown = '';
   $formshipname = $_GET['shipname'];
-  $formshiptype = $_GET['shiptype'];
-  $formhomeport = $_GET['homeport'];
   $formdestination = $_GET['destination'];
-  $formcaptainfirstname = $_GET['captainfirstname'];
-  $formcaptainlastname = $_GET['captainlastname'];
-  $formcaptainhome = $_GET['captainhome'];
+  $formproductname = $_GET['productname'];
+  $formcaptainname = $_GET['captainname'];
+  $formcaptainhometown = $_GET['captainhometown'];
   $shipnamefilter = '';
-  $shiptypefilter = '';
-  $homeportfilter = '';
   $destinationfilter = '';
-  $captainfirstnamefilter = '';
-  $captainlastnamefilter = '';
-  $captainhomefilter = '';
+  $productnamefilter = '';
+  $captainnamefilter = '';
+  $captainhometownfilter = '';
+
   
   /* Look through the data requested by the user and create the query. */
   
   foreach ($_GET['datareq'] as $datapoint) {
 	 if ($datapoint == 'shipname') {
-		 $shipname = "?a mdb:schip ?s. ?s mdb:scheepsnaam ?o.";
+		 $shipname = "?myjrn ns2:hasShip ?s. ?s ns2:label ?o.";
 	 }
-	 if ($datapoint == 'shiptype') {
-		 $shiptype = "?a mdb:schip ?s. ?s mdb:scheepstype ?t. ?t skos:prefLabel ?q.";
+	 if ($datapoint == 'productname') {
+		 $productflow = "?myjrn ns2:hasProductflow ?flow.";
+		 $productinout = "{ ?flow ns2:hasIncoming ?inc.  ?inc ns2:hasPart ?part. } UNION { ?flow ns2:hasOutgoing ?out.  ?out ns2:hasPart ?part. }";
+		 $productname = "?part ns2:hasProduct ?prod. ?prod rdfs:label ?p.";
 	 }
-	 if ($datapoint == 'homeport') {
-		 $homeport = "?a mdb:ligplaats ?x. ?x rdfs:label ?y.";
+ 	 if ($datapoint == 'homeport') {
+		 $homeport = "Elbing";
 	 }
-	 if ($datapoint == 'destination') {
-		 $destination = "?a mdb:bestemming ?b. ?b rdfs:label ?l.";
+  	 if ($datapoint == 'destination') {
+		 $destination = "?myjrn ns2:hasDestination ?dest. ?dest ns2:hasAltName ?h.";
 	 }
-	 if ($datapoint == 'captainfirstname') {
-		 $captainfirstname = "?pers mdb:voornaam ?vn.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
+	 if ($datapoint == 'captainname') {
+		 $captainname = "?myjrn ns2:hasCaptain ?cap. ?cap ns2:label ?c.";
 	 }
-	 if ($datapoint == 'captainlastname') {
-		 $captainlastname = "?pers mdb:achternaam ?an.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
+	 if ($datapoint == 'shipdate') {
+		 $shipdate = "?myjrn ns2:hasDate ?d.";
 	 }
-	 if ($datapoint == 'captainhome') {
-		 $captainhome = "?pers mdb:woonplaats ?h. ?h rdfs:label ?z.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
+	 if ($datapoint == 'captainhometown') {
+		 $captainhometown = "?myjrn ns2:hasCaptain ?cap. ?cap ns2:hasHometown ?town. ?town rdfs:label ?t.";
 	 }
   }
 
@@ -131,25 +127,20 @@
   if ($formshipname !== '') {
      $shipnamefilter = "FILTER (str(?o) = '$formshipname')";
   }
-  if ($formshiptype !== '') {
-	  $shiptypefilter = "FILTER (str(?q) = '$formshiptype')";
-  }
-  if ($formhomeport !== '') {
-	  $homeportfilter = "FILTER (str(?y) = '$formhomeport')";
-  }
   if ($formdestination !== '') {
-	  $destinationfilter = "FILTER (str(?l) = '$formdestination')";
+     $destinationfilter = "FILTER (str(?h) = ' $formdestination')";
   }
-  if ($formcaptainfirstname !== '') {
-	  $captainfirstnamefilter = "FILTER (str(?vn) = '$formcaptainfirstname')";
-  }  
-  if ($formcaptainlastname !== '') {
-	  $captainlastnamefilter = "FILTER (str(?an) = '$formcaptainlastname')";
+  if ($formproductname !== '') {
+     $productnamefilter = "FILTER (str(?p) = '$formproductname')";
   }
-  if ($formcaptainhome !== '') {
-	  $captainhomefilter = "FILTER (str(?z) = '$formcaptainhome')";
+  if ($formcaptainname !== '') {
+     $captainnamefilter = "FILTER (str(?c) = '$formcaptainname')";
   }
-
+  if ($formcaptainhometown !== '') {
+     $captainhometownfilter = "FILTER (str(?t) = '$formcaptainhometown')";
+  }
+  
+  
   if ($errs = $store->getErrors()) {
      echo "<h1>getRemoteSotre error<h1>" ;
   }
@@ -163,31 +154,30 @@
   PREFIX gzm: <http://purl.org/collections/nl/dss/gzmvoc/>
   PREFIX mdb: <http://purl.org/collections/nl/dss/mdb/>
   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+  PREFIX ns2: <http://purl.org/collections/nl/dss/elbing/>
   
   SELECT * WHERE {
-	    ?pc mdb:has_aanmonstering ?a.
+	    ?myjrn rdf:type ns2:Journey.
 		$shipname
-		$shiptype
-		$homeport
+		$shipdate
 		$destination
-		$captaininfo
-		$captainfirstname
-		$captainlastname
-		$captainhome
+		$productflow
+		$productinout
+		$productname
+		$captainname
+		$captainhometown
   $shipnamefilter
-  $shiptypefilter
-  $homeportfilter
   $destinationfilter
-  $captainfirstnamefilter
-  $captainlastnamefilter
-  $captainhomefilter
-
+  $productnamefilter
+  $captainnamefilter
+  $captainhometownfilter
+  
   }
   LIMIT 10";
   
   /* execute the query */
   $rows = $store->query($query, 'rows'); 
-
+ 
   
     if ($errs = $store->getErrors()) {
        echo "Query errors" ;
@@ -198,24 +188,24 @@
     echo "<table id='results'>
     <thead>
         <th>Shipname</th>
-		<th>Shiptype</th>
+		<th>Date</th>
 		<th>Homeport</th>
 		<th>Destination</th>
-		<th>Captain first name</th>
-		<th>Captain last name</th>
-		<th>Captain home</th>
+		<th>Product Name</th>
+		<th>Captain Name</th>
+		<th>Captain Hometown</th>
     </thead>";
 
     /* loop for each returned row */
     foreach( $rows as $row ) { 
     print "<tr>".
 	"<td>" . $row['o']. "</td>".
-	"<td>" . $row['q']. "</td>".
-	"<td>" . $row['y']. "</td>".
-	"<td>" . $row['l']. "</td>".
-	"<td>" . $row['vn']. "</td>".
-	"<td>" . $row['an']. "</td>".
-	"<td>" . $row['z']. "</td>".
+	"<td>" . $row['d']. "</td>".
+	"<td>" . $homeport. "</td>".
+	"<td>" . $row['h']. "</td>".
+	"<td>" . $row['p']. "</td>".
+	"<td>" . $row['c']. "</td>".
+	"<td>" . $row['t']. "</td>".
 	"</tr>" ;
     }
     echo "</table>" 

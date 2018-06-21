@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 <style>
 .navigation {
@@ -25,7 +26,7 @@
 	background-color: #4C50AF;
 	color: white;
 	}
-	
+
 .explanation {
 	font-family: "Trebuchet MS", Arial, Helvetiva, sans-serif;
 	background-color: #f2f2f2;
@@ -34,7 +35,7 @@
 	width: 50%;
 	}
 
-
+	
 #input {
 	font-family: "Trebuchet MS", Arial, Helvetiva, sans-serif;
 	border-collapse: collapse;
@@ -62,13 +63,14 @@
 
 <body>
 <div class=navigation>
-<a class="active" href="mdb.html">MDB</a>
-<a href="archangel.html">Archangel</a>
+<a href="mdb.html">MDB</a>
+<a class="active" href="archangel.html">Archangel</a>
 <a href="elbing.html">Elbing</a>
 </div>
 
+
 <div class=table>
-<form action="mdb_results.php" method="get">
+<form action="archangel_results.php" method="get">
 <table id="input">
 	<tr><th>Display variables</th>
 	<th>Filter variables</th>
@@ -80,53 +82,43 @@
     <td>
 		<input type="text" name="shipname">
     </td></tr>
-	
+
 	<tr><td>
-		<input type="checkbox" name="datareq[]" id="shiptype" value="shiptype">
-		<label for="shiptype">Shiptype</label>
+		<input type="checkbox" name="datareq[]" id="sourcetype" value="sourcetype">
+		<label for="sourcetype">Journey Type</label>
 	</td>
     <td>
-		<input type="text" name="shiptype">
+		<input type="text" name="sourcetype">
     </td></tr>
 
 	<tr><td>
 		<input type="checkbox" name="datareq[]" id="homeport" value="homeport">
-		<label for="homeport">Homeport</label>
+		<label for="homeport">Home Port</label>
 	</td>
     <td>
 		<input type="text" name="homeport">
     </td></tr>
-	
+
 	<tr><td>
 		<input type="checkbox" name="datareq[]" id="destination" value="destination">
 		<label for="destination">Destination</label>
 	</td>
+    <td></td></tr>
+	
+	<tr><td>
+		<input type="checkbox" name="datareq[]" id="captainname" value="captainname">
+		<label for="captainname">Captain Name</label>
+	</td>
     <td>
-		<input type="text" name="destination">
+		<input type="text" name="captainname">
     </td></tr>
 	
 	<tr><td>
-		<input type="checkbox" name="datareq[]" id="captainfirstname" value="captainfirstname">
-		<label for="captainfirstname">Captain firstname</label>
-	</td>
-	<td>
-		<input type="text" name="captainfirstname">
-    </td></tr>
-	
-	<tr><td>
-		<input type="checkbox" name="datareq[]" id="captainlastname" value="captainlastname">
-		<label for="captainlastname">Captain lastname</label>
+		<input type="checkbox" name="datareq[]" id="captainhometown" value="captainhometown">
+		<label for="captainhometown">Captain Hometown</label>
 	</td>
     <td>
-		<input type="text" name="captainlastname">
-    </td></tr>
-
-	<tr><td>
-		<input type="checkbox" name="datareq[]" id="captainhome" value="captainhome">
-		<label for="captainhome">Captain home</label>
-	</td>
-    <td>
-		<input type="text" name="captainhome">
+		<input type="text" name="captainhometown">
     </td></tr>
 
 	
@@ -136,17 +128,18 @@
 </div>
 <div class=explanation>
 <h2>Dutch Ships and Sailors</h2>
-<p>Dutch ships and sailors is a database that brings together maritime historical data from multiple sources to allow people to look through the data for research.
+<p>Dutch ships and sailors is a database that brings together maritime historical data from multiple sources to allow people to look through the data for research purposes.
 The maritime datasets in this database are based on records that were kept in multiple locations including Amsterdam, Archangel, and Elbing.
 Most of these datasets are focused around the contracts for ships and their captains, containing information about their journey and the people who were on board.
 For this interface program I have selected a number the attributes found in these datasets and created a PHP script that can convert simple user input into database queries.
 This allows users to look through the data without having knowledge of databases or programming languages.</p>
-<h2>MDB</h2>
-<p>The dataset MDB is based on general ship records containing Shipnames, Origin Cities and Destinations, as well as data about the people on the ships.
-For simplicity sake I only included captain data because those are mostly uniform while other professions had multiple different titles which makes them hard to categorize.</p>
+<h2>Archangel</h2>
+<p>The dataset Archangel is based on records of ships sailing to the Russian port city Archangel.
+This dataset contains information about shipnames, the origin of the journey, and the type of journey.
+Additionally it contains captain information.</p>
 <h2>How to use the interface</h2>
 <p>The interface works by clicking on the checkbox left of the attribute that you can search for. For example clicking the checkbox left of Shipname will generate a query that searches the database for shipnames.
-On the right you are able to apply a filter to search for specific shipnames, for example Maria. These filters are caps-sensitive so please be specific when using them.
+On the right you are able to apply a filter to search for specific shipnames, for example Maria. These filters are caps-specific so please be careful when using them.
 The queries are created based on user input and selecting all the available options at once will put a lot of strain on the database so please only select the properties that you are actually interested in.</p>
 </div>
 </body>

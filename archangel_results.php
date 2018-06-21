@@ -53,14 +53,13 @@
 
   <body>
   <div class=navigation>
-  <a class="active" href="mdb.html">MDB</a>
-  <a href="archangel.html">Archangel</a>
+  <a href="mdb.html">MDB</a>
+  <a class="active" href="archangel.html">Archangel</a>
   <a href="elbing.html">Elbing</a>
   </div>
 
   <div class=table>
 
-  
   <?php
   error_reporting(E_ERROR | E_PARSE);
   /* ARC2 static class inclusion */ 
@@ -75,54 +74,42 @@
   /* Create empty variables to use later if needed. */
   
   $shipname = '';
-  $shiptype = '';
+  $sourcetype = '';
   $homeport = '';
   $destination = '';
-  $captaininfo = '';
-  $captainfirstname = '';
-  $captainlastname = '';
-  $captainhome = '';
+  $captainname = '';
+  $captainhometown = '';
   $formshipname = $_GET['shipname'];
-  $formshiptype = $_GET['shiptype'];
+  $formsourcetype = $_GET['sourcetype'];
   $formhomeport = $_GET['homeport'];
-  $formdestination = $_GET['destination'];
-  $formcaptainfirstname = $_GET['captainfirstname'];
-  $formcaptainlastname = $_GET['captainlastname'];
-  $formcaptainhome = $_GET['captainhome'];
+  $formcaptainname = $_GET['captainname'];
+  $formcaptainhometown = $_GET['captainhometown'];
   $shipnamefilter = '';
-  $shiptypefilter = '';
+  $sourcetypefilter = '';
   $homeportfilter = '';
-  $destinationfilter = '';
-  $captainfirstnamefilter = '';
-  $captainlastnamefilter = '';
-  $captainhomefilter = '';
+  $captainnamefilter = '';
+  $captainhometownfilter = '';
   
   /* Look through the data requested by the user and create the query. */
   
   foreach ($_GET['datareq'] as $datapoint) {
 	 if ($datapoint == 'shipname') {
-		 $shipname = "?a mdb:schip ?s. ?s mdb:scheepsnaam ?o.";
+		 $shipname = "?myvoy ns1:hasShip ?s. ?s ns1:label ?o.";
 	 }
-	 if ($datapoint == 'shiptype') {
-		 $shiptype = "?a mdb:schip ?s. ?s mdb:scheepstype ?t. ?t skos:prefLabel ?q.";
+ 	 if ($datapoint == 'sourcetype') {
+		 $sourcetype = "?myvoy ns1:hasSourceType ?st.";
 	 }
-	 if ($datapoint == 'homeport') {
-		 $homeport = "?a mdb:ligplaats ?x. ?x rdfs:label ?y.";
+ 	 if ($datapoint == 'homeport') {
+		 $homeport = "?myvoy ns1:hasHarbour ?har. ?har ns1:hasHarbour1 ?hh. ?hh rdfs:label ?hp.";
 	 }
-	 if ($datapoint == 'destination') {
-		 $destination = "?a mdb:bestemming ?b. ?b rdfs:label ?l.";
+  	 if ($datapoint == 'destination') {
+		 $destination = "Archangel";
 	 }
-	 if ($datapoint == 'captainfirstname') {
-		 $captainfirstname = "?pers mdb:voornaam ?vn.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
+ 	 if ($datapoint == 'captainname') {
+		 $captainname = "?myvoy ns1:hasCaptain ?cap. ?cap ns1:label ?c.";
 	 }
-	 if ($datapoint == 'captainlastname') {
-		 $captainlastname = "?pers mdb:achternaam ?an.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
-	 }
-	 if ($datapoint == 'captainhome') {
-		 $captainhome = "?pers mdb:woonplaats ?h. ?h rdfs:label ?z.";
-		 $captaininfo = "?pc mdb:rang mdb:rang-schipper. ?pc mdb:persoon ?pers.";
+  	 if ($datapoint == 'captainhometown') {
+		 $captainhometown = "?myvoy ns1:hasCaptHometown ?town. ?town rdfs:label ?h.";
 	 }
   }
 
@@ -131,25 +118,20 @@
   if ($formshipname !== '') {
      $shipnamefilter = "FILTER (str(?o) = '$formshipname')";
   }
-  if ($formshiptype !== '') {
-	  $shiptypefilter = "FILTER (str(?q) = '$formshiptype')";
+  if ($formsourcetype !== '') {
+     $sourcetypefilter = "FILTER (str(?st) = '$formsourcetype')";
   }
   if ($formhomeport !== '') {
-	  $homeportfilter = "FILTER (str(?y) = '$formhomeport')";
+     $homeportfilter = "FILTER (str(?hp) = '$formhomeport')";
   }
-  if ($formdestination !== '') {
-	  $destinationfilter = "FILTER (str(?l) = '$formdestination')";
+  if ($formcaptainname !== '') {
+     $captainnamefilter = "FILTER (str(?c) = '$formcaptainname')";
   }
-  if ($formcaptainfirstname !== '') {
-	  $captainfirstnamefilter = "FILTER (str(?vn) = '$formcaptainfirstname')";
-  }  
-  if ($formcaptainlastname !== '') {
-	  $captainlastnamefilter = "FILTER (str(?an) = '$formcaptainlastname')";
-  }
-  if ($formcaptainhome !== '') {
-	  $captainhomefilter = "FILTER (str(?z) = '$formcaptainhome')";
+  if ($formcaptainhometown !== '') {
+     $captainhometownfilter = "FILTER (str(?n) = '$formcaptainhometown')";
   }
 
+  
   if ($errs = $store->getErrors()) {
      echo "<h1>getRemoteSotre error<h1>" ;
   }
@@ -163,24 +145,20 @@
   PREFIX gzm: <http://purl.org/collections/nl/dss/gzmvoc/>
   PREFIX mdb: <http://purl.org/collections/nl/dss/mdb/>
   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+  PREFIX ns1: <http://purl.org/collections/nl/dss/archangel/>
   
   SELECT * WHERE {
-	    ?pc mdb:has_aanmonstering ?a.
+	    ?myvoy rdf:type ns1:Voyage.
 		$shipname
-		$shiptype
+		$sourcetype
 		$homeport
-		$destination
-		$captaininfo
-		$captainfirstname
-		$captainlastname
-		$captainhome
+		$captainname
+		$captainhometown
   $shipnamefilter
-  $shiptypefilter
+  $sourcetypefilter
   $homeportfilter
-  $destinationfilter
-  $captainfirstnamefilter
-  $captainlastnamefilter
-  $captainhomefilter
+  $captainnamefilter
+  $captainhometownfilter
 
   }
   LIMIT 10";
@@ -198,24 +176,22 @@
     echo "<table id='results'>
     <thead>
         <th>Shipname</th>
-		<th>Shiptype</th>
+		<th>Journey Type</th>
 		<th>Homeport</th>
 		<th>Destination</th>
-		<th>Captain first name</th>
-		<th>Captain last name</th>
-		<th>Captain home</th>
+		<th>Captain Name</th>
+		<th>Captain Hometown</th>
     </thead>";
 
     /* loop for each returned row */
     foreach( $rows as $row ) { 
     print "<tr>".
 	"<td>" . $row['o']. "</td>".
-	"<td>" . $row['q']. "</td>".
-	"<td>" . $row['y']. "</td>".
-	"<td>" . $row['l']. "</td>".
-	"<td>" . $row['vn']. "</td>".
-	"<td>" . $row['an']. "</td>".
-	"<td>" . $row['z']. "</td>".
+	"<td>" . $row['st']. "</td>".	
+	"<td>" . $row['hp']. "</td>".
+	"<td>" . $destination. "</td>".
+	"<td>" . $row['c']. "</td>".
+	"<td>" . $row['h']. "</td>".
 	"</tr>" ;
     }
     echo "</table>" 
